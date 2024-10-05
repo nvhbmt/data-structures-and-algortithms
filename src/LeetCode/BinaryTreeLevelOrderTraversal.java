@@ -6,23 +6,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BinaryTreeLevelOrderTraversal {
-    public void travel(List<List<Integer>> result, TreeNode root) {
+    List<List<Integer>> list = new ArrayList<>();
+
+    private void dfs(TreeNode root, int height) {
         if (root == null) return;
-        List<Integer> nodes = new ArrayList<>();
-        if (root.left != null) nodes.add(root.left.val);
-        if (root.right != null) nodes.add(root.right.val);
-        if (!nodes.isEmpty()) result.add(nodes);
-        travel(result, root.left);
-        travel(result, root.right);
+
+        if (height == list.size()) list.add(new ArrayList<>());
+
+        List<Integer> array = list.get(height);
+        array.add(root.val);
+        list.set(height, array);
+
+        dfs(root.left, height + 1);
+        dfs(root.right, height + 1);
     }
 
     public List<List<Integer>> levelOrder(TreeNode root) {
-        List<List<Integer>> result = new ArrayList<>();
-        if (root == null) return result;
-        List<Integer> nodes = new ArrayList<>();
-        nodes.add(root.val);
-        result.add(nodes);
-        travel(result, root);
-        return result;
+        if (root == null) return list;
+        dfs(root, 0);
+        return list;
     }
 }
